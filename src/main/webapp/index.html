@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="webApp" ng-controller="AppController">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Bitcoin Analyser - Aurum</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./lib/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- datetime Picker CSS -->
+    <link href="./lib/css/daterangepicker-bs3.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./css/custom.css" rel="stylesheet">
+  	<link ng-href="./css/theme-works.css" rel="stylesheet" type="text/css">
+    
+    <!-- Auto Complete CSS -->
+    <link href="./lib/css/angucomplete-alt.css" rel="text/css">
+
+    <!-- Custom Fonts -->
+    <link href="./lib/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- jQuery -->
+    <script src="./lib/js/jquery.min.js"></script>
+    <script src="./lib/js/jquery.maskMoney.js"></script>
+    
+    <!-- Angular JS -->
+    <script src="./lib/js/angular.min.js"></script>
+    <script src="./lib/js/angular-animate.min.js"></script>
+    <script src="./lib/js/angular-ui-router.min.js"></script>
+    <script src="./lib/js/mask.js"></script>
+    <script src="./lib/js/picklist.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./lib/js/bootstrap.min.js"></script>
+    <script src="./lib/js/ui-bootstrap-0.14.3.min.js"></script>
+
+    <!-- SmartTable plugin -->
+    <script src="./lib/js/smart-table.min.js"></script>
+
+    <!-- Datetime Picker Javascript -->
+    <script src="./lib/js/moment.min.js"></script>
+    <script src="./lib/js/daterangepicker.min.js"></script>
+
+    <!-- suporte a criptografia -->
+    <script src="./lib/js/sha1.min.js"></script>
+    <script src="./lib/js/base64.min.js"></script>
+
+    <!-- Project Configuration -->
+    <script src="./js/config.js"></script>
+
+    <!-- Angular Modules -->
+    <script src="./js/app.js"></script>
+    <script src="./js/controllers.js"></script>
+    <script src="./js/services.js"></script>
+    <script src="./js/filters.js"></script>
+    <script src="./js/directives.js"></script>
+
+    <script src="./js/dynamiccontrollers.js"></script>
+    <script src="./js/webservice.js"></script>
+    
+</head>
+
+<body class="theme-app" ng-class="(project.menu && currentview.menu != false?'menu':'') + ' ' + (project.menu==false && currentview.menu!=false?'tabbed':'') + ' ' + platforms + ' ' + (project.footer?'footer':'')">
+    <div ng-if="project" class="wrapper">
+
+        <div ui-view="header-container"></div>
+				
+        <div ui-view="menu-container" role="navigation"></div>
+
+        <div ui-view="page-container" class="page-wrapper theme-main-container"></div>
+        
+        <div ui-view="footer-container" class="theme-footer-container"></div>
+
+    </div>
+
+</body>
+
+</html>

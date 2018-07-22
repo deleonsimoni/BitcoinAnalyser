@@ -1,0 +1,22 @@
+﻿<!-- Modal Alert -->
+<div class="modal-header bg-primary">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="dismissDialog()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">{{title}}
+    </h4>
+</div>
+<div class="modal-body">
+    <h4 id="AlertMessage" class="text-center"></h4>
+    <div class="text-center text-primary">
+        <p ng-repeat="line in message track by $index" ng-class="$odd>0?'lead':''">{{line}}</p>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type='button' class='btn btn-default' data-dismiss="modal" ng-click="closeDialog()">
+        <i class='fa fa-check'></i>&nbsp;Ok
+    </button>
+    <button type='button' class='btn btn-primary' data-dismiss="modal" ng-click="dismissDialog()">
+        <i class='fa fa-times'></i>&nbsp;Cancelar
+    </button>
+</div>

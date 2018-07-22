@@ -1,0 +1,11 @@
+﻿<!-- Modal Alert -->
+<div class="modal-dialog" role="document">
+    <div class="modal-content modal-warning-content">
+        <div class="modal-body modal-warning-body">
+            <i class='fa fa-spinner fa-pulse fa-2x'></i><br/>
+            <span class="text-center">
+                <p ng-repeat="line in message track by $index" ng-class="$odd>0?'lead':''">{{line}}</p>
+            </span>
+        </div>
+    </div>
+</div>

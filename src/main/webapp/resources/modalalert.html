@@ -1,0 +1,57 @@
+﻿<!-- Modal Alert -->
+<div class="modal-header" ng-class="moreDetails?'bg-danger':'bg-primary'">
+    <button type="button" class="close" ng-click="dismissDialog()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">
+        <i class='fa fa-exclamation-triangle'></i>
+        {{title}}
+    </h4>
+</div>
+<div class="modal-body">
+    <h4 class="text-center">
+        <p ng-repeat="line in message track by $index" ng-class="$odd>0?'lead':''">{{line}}</p>
+    </h4>
+    <div class="text-center">{{cause}}</div>
+    <br/>
+    <div id="AlertComment" class="collapse">
+        <label>Comentar:</label>
+        <textarea rows="5" ng-model="content.commentMessage" class="form-control noresize" placeholder="Informe aqui suas observações sobre esta ocorrência"></textarea>
+        <div class="checkbox">
+            <label>
+                <input ng-model="content.copyMe" type="checkbox">Enviar uma cópia para
+                <input ng-model="content.copyAddress" type="email" class="ng-hide" ng-show="content.copyMe">
+            </label>
+        </div>
+    </div>
+    <div class="collapse" id="AlertStackMessage">
+        <label>Causa:</label>
+        <textarea rows="5" ng-model="moreDetails" class="form-control noresize" placeholder="Informe aqui suas observações sobre esta ocorrência" readonly></textarea>
+    </div>
+    <br>
+    <div class="alert alert-success ng-hide text-center" ng-show="successMessage">
+        <i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;{{successMessage}}
+    </div>
+    <div class="alert alert-warning text-center" class="ng-hide" ng-show="errorMessage">
+        <button type="button" class="close" ng-click="errorMessage=null">×</button>
+        <i class="fa fa-warning">&nbsp;</i>&nbsp;<span>{{errorMessage}}</span>
+    </div>
+</div>
+<div class="modal-footer" id="AlertFooter">
+    <button type="button" class="btn btn-danger pull-left ng-hide" ng-show="publishButton" ng-click="publish($event)">
+        <i class='fa fa-share-square-o'>&nbsp;</i>
+        <span class="hidden-xxs">Publicar</span>
+    </button>
+    <button class="btn btn-default pull-left ng-hide" ng-show="commentButton" type="button" data-toggle="collapse" data-target="#AlertComment" aria-expanded="false" aria-controls="AlertComment">
+        <i class="fa fa-comment">&nbsp;</i>
+        <span class="hidden-xs">Comentar</span>
+    </button>
+    <button class="btn btn-default pull-left ng-hide" ng-show="stackButton" type="button" data-toggle="collapse" data-target="#AlertStackMessage" aria-expanded="false" aria-controls="AlertStackMessage">
+        <i class="fa fa-caret-square-o-down">&nbsp;</i>
+        <span class="hidden-xs">Mais detalhes</span>
+    </button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="dismissDialog()">
+        <i class='fa fa-times'></i>&nbsp;
+        Fechar
+    </button>
+</div>
