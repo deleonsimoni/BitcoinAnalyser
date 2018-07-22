@@ -8,7 +8,14 @@ Target Project: WildFly
 What is it?
 -----------
 
-Este é um projeto teste de análise de uma amostra do mercado de bitcoin
+Este é um projeto teste de análise de uma amostra do mercado de bitcoin contendo um back-end com Java e Front-end AngularJS
+
+Conforme solicitado, este projeto provê os seguintes itens abaixo:
+
+ - Um endpoint (http://localhost:8080/BitcoinAnalyser/aurum/bitcoin) que retorna os valores formatados coletados do Mercado Bitcoin
+ - Uma aplicação AngularJS para exibição dos dados (http://localhost:8080/BitcoinAnalyser)
+ 
+Espero que gostem. :)
 
 
 System requirements
@@ -32,4 +39,4 @@ Por fim, teremos uma URL de acesso: http://localhost:8080/BitcoinAnalyser/
 Run the Arquillian Tests 
 -------------------------
 
-Para executar os testes da aplicação basta rodar o goals test do maven
+Para executar os testes da aplicação basta rodar o goals clean test -Parq-wildfly-managed do maven

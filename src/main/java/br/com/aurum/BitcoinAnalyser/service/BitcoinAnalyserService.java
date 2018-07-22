@@ -46,7 +46,7 @@ public class BitcoinAnalyserService {
     @Inject
     private Logger log;
 
-    public static List<MercadoBitcoinPojo>  callMercadoBitcoin() throws Exception 
+    public static List<MercadoBitcoinPojo> callMercadoBitcoin() throws Exception 
 	{
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		try
@@ -80,7 +80,7 @@ public class BitcoinAnalyserService {
     public BitcoinAnalyserPojo getBitcoinAnalyser() throws Exception{
         log.info(" ** Consumindo Serviço mercadobitcoin " );
         List<MercadoBitcoinPojo> listaMercadoBitcoin = callMercadoBitcoin();
-        log.info(" ** Serviço mercadobitcoin consumido com sucesso ** " );
+        log.info(" ** Serviço mercadobitcoin consumido com sucesso / " + listaMercadoBitcoin.size() + " dados ** " );
         
         log.info(" ** Trabalhando os dados " );
         BitcoinAnalyserPojo bitcoinAurum = refineData(listaMercadoBitcoin);
