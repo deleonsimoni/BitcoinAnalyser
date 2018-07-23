@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Pojo contendo as informações de retorno do JSON
  */
@@ -11,62 +13,92 @@ public class BitcoinAnalyserPojo implements Serializable {
 
 	
 	private static final long serialVersionUID = 7389848133724129186L;
-	private List<BigDecimal> maiores_vendas;
-	private List<BigDecimal> maiores_compras;
-	private BigDecimal media_compra;
-	private BigDecimal media_venda;
-	private BigDecimal mediana_compra;
-	private BigDecimal mediana_venda;
-	private BigDecimal desvio_padrao_venda;
-	private BigDecimal desvio_padrao_compra;
 	
-	public List<BigDecimal> getMaiores_vendas() {
-		return maiores_vendas;
-	}
-	public void setMaiores_vendas(List<BigDecimal> maiores_vendas) {
-		this.maiores_vendas = maiores_vendas;
-	}
-	public List<BigDecimal> getMaiores_compras() {
-		return maiores_compras;
-	}
-	public void setMaiores_compras(List<BigDecimal> maiores_compras) {
-		this.maiores_compras = maiores_compras;
-	}
-	public BigDecimal getMedia_compra() {
-		return media_compra;
-	}
-	public void setMedia_compra(BigDecimal media_compra) {
-		this.media_compra = media_compra;
-	}
-	public BigDecimal getMedia_venda() {
-		return media_venda;
-	}
-	public void setMedia_venda(BigDecimal media_venda) {
-		this.media_venda = media_venda;
-	}
-	public BigDecimal getMediana_compra() {
-		return mediana_compra;
-	}
-	public void setMediana_compra(BigDecimal mediana_compra) {
-		this.mediana_compra = mediana_compra;
-	}
-	public BigDecimal getMediana_venda() {
-		return mediana_venda;
-	}
-	public void setMediana_venda(BigDecimal mediana_venda) {
-		this.mediana_venda = mediana_venda;
-	}
-	public BigDecimal getDesvio_padrao_venda() {
-		return desvio_padrao_venda;
-	}
-	public void setDesvio_padrao_venda(BigDecimal desvio_padrao_venda) {
-		this.desvio_padrao_venda = desvio_padrao_venda;
-	}
-	public BigDecimal getDesvio_padrao_compra() {
-		return desvio_padrao_compra;
-	}
-	public void setDesvio_padrao_compra(BigDecimal desvio_padrao_compra) {
-		this.desvio_padrao_compra = desvio_padrao_compra;
-	}
+	@JsonProperty("maiores_vendas")
+	private List<BigDecimal> topSell;
 	
+	@JsonProperty("maiores_compras")
+	private List<BigDecimal> topBuy;
+	
+	@JsonProperty("media_compra")
+	private BigDecimal averageBuy;
+	
+	@JsonProperty("media_venda")
+	private BigDecimal averageSell;
+	
+	@JsonProperty("mediana_compra")
+	private BigDecimal medianBuy;
+	
+	@JsonProperty("mediana_venda")
+	private BigDecimal medianSell;
+	
+	@JsonProperty("desvio_padrao_venda")
+	private BigDecimal standardDeviationSell;
+	
+	@JsonProperty("desvio_padrao_compra")
+	private BigDecimal standardDeviationBuy;
+	
+	public List<BigDecimal> getTopSell() {
+		return topSell;
+	}
+
+	public void setTopSell(List<BigDecimal> topSell) {
+		this.topSell = topSell;
+	}
+
+	public List<BigDecimal> getTopBuy() {
+		return topBuy;
+	}
+
+	public void setTopBuy(List<BigDecimal> topBuy) {
+		this.topBuy = topBuy;
+	}
+
+	public BigDecimal getAverageBuy() {
+		return averageBuy;
+	}
+
+	public void setAverageBuy(BigDecimal averageBuy) {
+		this.averageBuy = averageBuy;
+	}
+
+	public BigDecimal getAverageSell() {
+		return averageSell;
+	}
+
+	public void setAverageSell(BigDecimal averageSell) {
+		this.averageSell = averageSell;
+	}
+
+	public BigDecimal getMedianBuy() {
+		return medianBuy;
+	}
+
+	public void setMedianBuy(BigDecimal medianBuy) {
+		this.medianBuy = medianBuy;
+	}
+
+	public BigDecimal getMedianSell() {
+		return medianSell;
+	}
+
+	public void setMedianSell(BigDecimal medianSell) {
+		this.medianSell = medianSell;
+	}
+
+	public BigDecimal getStandardDeviationSell() {
+		return standardDeviationSell;
+	}
+
+	public void setStandardDeviationSell(BigDecimal standardDeviationSell) {
+		this.standardDeviationSell = standardDeviationSell;
+	}
+
+	public BigDecimal getStandardDeviationBuy() {
+		return standardDeviationBuy;
+	}
+
+	public void setStandardDeviationBuy(BigDecimal standardDeviationBuy) {
+		this.standardDeviationBuy = standardDeviationBuy;
+	}
 }

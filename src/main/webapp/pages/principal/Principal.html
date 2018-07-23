@@ -6,22 +6,39 @@
 						 
                                 <h1>Bem vindo!<br/>O resultado da análise do Bitcoin está abaixo:</h1>
                                 <br/>
-                                <h3>Maiores valores de compra: <span  ng-repeat="maxBuy in bitcoinAnalyser.maiores_compras"> {{maxBuy}} -  </span ></h3>
-                                <h3>Maiores valores de venda: <span  ng-repeat="maxSell in bitcoinAnalyser.maiores_vendas"> {{maxSell}} -  </span ></h3>
-                                <h3>Média do valor de compra: {{bitcoinAnalyser.media_compra}}</h3>
-                                <h3>Média do valor de venda: {{bitcoinAnalyser.media_venda}}</h3>
-                                <h3>Mediana do valor de compra: {{bitcoinAnalyser.mediana_compra}}</h3>
-                                <h3>Mediana do valor de venda: {{bitcoinAnalyser.mediana_venda}}</h3>
-                                <h3>Desvio padrão valor de compra: {{bitcoinAnalyser.desvio_padrao_compra}}</h3>
-                                <h3>Desvio padrão valor de venda: {{bitcoinAnalyser.desvio_padrao_venda}}</h3>
+                                
+                                
+                                <div class="btn-group btn-group-lg" role="group">
+								  <button type="button" ng-click="changeView(1)" class="btn btn-default">Compra</button>
+								  <button type="button" ng-click="changeView(2)" class="btn btn-default">Venda</button>
+								  <button type="button" ng-click="changeView(3)" class="btn btn-default">Todos</button>
+								</div>
+                                
+                                <div ng-show="buy || all">
+                                	<h2>Compra</h2>
+                                	<h3>Maiores valores: <span  ng-repeat="maxBuy in bitcoinAnalyser.maiores_compras"> {{maxBuy}} -  </span ></h3>
+   	                                <h3>Média: {{bitcoinAnalyser.media_compra}}</h3>
+   	                                <h3>Mediana: {{bitcoinAnalyser.mediana_compra}}</h3>
+   	                                <h3>Desvio padrão: {{bitcoinAnalyser.desvio_padrao_compra}}</h3>
+   	                                <hr/>
+                                </div>
+                                
+                                <div ng-show="sell || all">
+                                	<h2>Venda</h2>
+                                	<h3>Maiores valores: <span  ng-repeat="maxSell in bitcoinAnalyser.maiores_vendas"> {{maxSell}} -  </span ></h3>
+   	                                <h3>Média: {{bitcoinAnalyser.media_venda}}</h3>
+   	                                <h3>Mediana: {{bitcoinAnalyser.mediana_venda}}</h3>
+   	                                <h3>Desvio padrão: {{bitcoinAnalyser.desvio_padrao_venda}}</h3>
+                                </div>
                          </div>       
                          
+                         <br/>
                          <br/>
                          <br/>
                          
                          
                          <button class="btn btn-primary btn-lg" data-toggle="tooltip" title="Atualizar Dados" ng-click="go('splash')" >
-                             <i class="fa fa-refresh"></i>
+                             <i class="fa fa-refresh"> Atualizar Informações (Futuro filtro por datas...)</i>
                          </button>                 
                 </div>
     		</div>

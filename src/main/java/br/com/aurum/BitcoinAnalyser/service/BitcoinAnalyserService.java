@@ -1,19 +1,3 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package br.com.aurum.BitcoinAnalyser.service;
 
 import java.lang.reflect.Type;
@@ -39,116 +23,134 @@ import com.google.gson.reflect.TypeToken;
 import br.com.aurum.BitcoinAnalyser.model.BitcoinAnalyserPojo;
 import br.com.aurum.BitcoinAnalyser.model.MercadoBitcoinPojo;
 
-// The @Stateless annotation eliminates the need for manual transaction demarcation
 @Stateless
 public class BitcoinAnalyserService {
 
-    @Inject
-    private Logger log;
+	@Inject
+	private Logger log;
 
-    public static List<MercadoBitcoinPojo> callMercadoBitcoin() throws Exception 
-	{
+	public static List<MercadoBitcoinPojo> callMercadoBitcoin() throws Exception {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		try
-		{
+		try {
 			HttpGet getRequest = new HttpGet("https://www.mercadobitcoin.net/api/BTC/trades/1501871369/1501891200/");
 			getRequest.addHeader("accept", "application/json");
 			HttpResponse response = httpClient.execute(getRequest);
-			
-			//Verificando código de erro retornado
+
+			// Verificando código de erro retornado
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) 
-			{
+			if (statusCode != 200) {
 				throw new RuntimeException("Failed with HTTP error code : " + statusCode);
 			}
-			
-			//Now pull back the response object
+
+			// Now pull back the response object
 			HttpEntity httpEntity = response.getEntity();
 			String apiOutput = EntityUtils.toString(httpEntity);
-			
+
 			Gson gson = new Gson();
-			Type listType = new TypeToken< ArrayList<MercadoBitcoinPojo> >(){}.getType();
+			Type listType = new TypeToken<ArrayList<MercadoBitcoinPojo>>() {
+			}.getType();
 			return gson.fromJson(apiOutput, listType);
-		}
-		finally
-		{
-			//Important: Close the connect
+		} finally {
+			// Important: Close the connect
 			httpClient.getConnectionManager().shutdown();
 		}
 	}
-    
-    public BitcoinAnalyserPojo getBitcoinAnalyser() throws Exception{
-        log.info(" ** Consumindo Serviço mercadobitcoin " );
-        List<MercadoBitcoinPojo> listaMercadoBitcoin = callMercadoBitcoin();
-        log.info(" ** Serviço mercadobitcoin consumido com sucesso / " + listaMercadoBitcoin.size() + " dados ** " );
-        
-        log.info(" ** Trabalhando os dados " );
-        BitcoinAnalyserPojo bitcoinAurum = refineData(listaMercadoBitcoin);
-        log.info(" ** Dados trabalhados com sucesso ** " );
 
-    	return bitcoinAurum;
-    }
+	public BitcoinAnalyserPojo getBitcoinAnalyser() throws Exception {
+		log.info(" ** Consumindo Serviço mercadobitcoin ");
+		List<MercadoBitcoinPojo> listaMercadoBitcoin = callMercadoBitcoin();
+		log.info(" ** Serviço mercadobitcoin consumido com sucesso / " + listaMercadoBitcoin.size() + " dados ** ");
+
+		log.info(" ** Trabalhando os dados ");
+		BitcoinAnalyserPojo bitcoinAurum = refineData(listaMercadoBitcoin);
+		log.info(" ** Dados trabalhados com sucesso ** ");
+
+		return bitcoinAurum;
+	}
 
 	private BitcoinAnalyserPojo refineData(List<MercadoBitcoinPojo> listaMercadoBitcoin) {
-		BitcoinAnalyserPojo bitcoinAurum = new BitcoinAnalyserPojo();
-        BigDecimal mediaVenda  = BigDecimal.ZERO;
-        BigDecimal mediaCompra = BigDecimal.ZERO;
-        BigDecimal totalCompra = BigDecimal.ZERO;
-        BigDecimal totalVenda  = BigDecimal.ZERO;
-        List<BigDecimal> valoresCompra = new ArrayList<BigDecimal>();
-        List<BigDecimal> valoresVenda = new ArrayList<BigDecimal>();
-        List<BigDecimal> maioresCompras = new ArrayList<BigDecimal>();
-        List<BigDecimal> maioresVendas = new ArrayList<BigDecimal>();
-        
-        for (MercadoBitcoinPojo mercadoBitCoin : listaMercadoBitcoin) {
+
+		BitcoinAnalyserPojo bitcoinAurumPojo = new BitcoinAnalyserPojo();
+
+		BigDecimal averageSell = BigDecimal.ZERO;
+		BigDecimal averageBuy = BigDecimal.ZERO;
+
+		BigDecimal totalSell = BigDecimal.ZERO;
+		BigDecimal totalBuy = BigDecimal.ZERO;
+
+		List<BigDecimal> valuesSell = new ArrayList<BigDecimal>();
+		List<BigDecimal> valuesBuy = new ArrayList<BigDecimal>();
+
+		// Separar os dados de compra e vendas calculando o total de cada e a média
+		for (MercadoBitcoinPojo mercadoBitCoin : listaMercadoBitcoin) {
 			switch (mercadoBitCoin.getType()) {
 			case "sell":
-				totalVenda = totalVenda.add(BigDecimal.ONE);
-				mediaVenda = mediaVenda.add(mercadoBitCoin.getPrice()).setScale(5, RoundingMode.HALF_EVEN);
-				valoresVenda.add(mercadoBitCoin.getPrice());
+				totalSell = totalSell.add(BigDecimal.ONE).setScale(5, RoundingMode.HALF_EVEN);
+				averageSell = averageSell.add(mercadoBitCoin.getPrice()).setScale(5, RoundingMode.HALF_EVEN);
+				valuesSell.add(mercadoBitCoin.getPrice());
 				break;
 			case "buy":
-				totalCompra = totalCompra.add(BigDecimal.ONE);
-				mediaCompra = mediaCompra.add(mercadoBitCoin.getPrice()).setScale(5, RoundingMode.HALF_EVEN);
-				valoresCompra.add(mercadoBitCoin.getPrice());
+				totalBuy = totalBuy.add(BigDecimal.ONE).setScale(5, RoundingMode.HALF_EVEN);
+				averageBuy = averageBuy.add(mercadoBitCoin.getPrice()).setScale(5, RoundingMode.HALF_EVEN);
+				valuesBuy.add(mercadoBitCoin.getPrice());
 				break;
 			}
 		}
-        
-        Collections.sort(valoresCompra);
-        Collections.sort(valoresVenda);
-        bitcoinAurum.setMedia_compra(mediaCompra.divide(totalCompra, 5, BigDecimal.ROUND_HALF_UP));
-        bitcoinAurum.setMedia_venda(mediaVenda.divide(totalVenda, 5, BigDecimal.ROUND_HALF_UP));
-        
-        if(valoresCompra.size()%2 == 0){
-            bitcoinAurum.setMediana_compra(valoresCompra.get(((valoresCompra.size()/2) + (valoresCompra.size()/2+1))/2 ));
-        } else {
-            bitcoinAurum.setMediana_compra(valoresCompra.get((valoresCompra.size()+1)/2));
-        }
-        
-        if(valoresVenda.size()%2 == 0){
-            bitcoinAurum.setMediana_venda(valoresVenda.get(((valoresVenda.size()/2) + (valoresVenda.size()/2+1))/2 ));
-        } else {
-            bitcoinAurum.setMediana_venda(valoresVenda.get((valoresCompra.size()+1)/2));
-        }
-        
-        
-        for (int i = 0; maioresCompras.size() < 5; i++) {
-        	if(i == 0 || valoresCompra.get(i).compareTo(maioresCompras.get(maioresCompras.size()-1)) != 0){
-            	maioresCompras.add(valoresCompra.get(i));
-        	} else {
-        		continue;
-        	}
-		}
-        for (int i = 0; maioresVendas.size() < 5; i++) {
-        	if(i == 0 || valoresVenda.get(i).compareTo(maioresVendas.get(maioresVendas.size()-1)) != 0){
-        		maioresVendas.add(valoresVenda.get(i));
-        	} else {
-        		continue;
-        	}
-		}
-		bitcoinAurum.setMaiores_compras(maioresCompras);
-		bitcoinAurum.setMaiores_vendas(maioresVendas);
-		return bitcoinAurum;
+
+		// Ordenando os valores de compra e venda
+		Collections.sort(valuesBuy);
+		Collections.sort(valuesSell);
+
+		// Calculando a média
+		bitcoinAurumPojo.setAverageBuy(averageBuy.divide(totalBuy, 3, BigDecimal.ROUND_HALF_UP));
+		bitcoinAurumPojo.setAverageSell(averageSell.divide(totalSell, 3, BigDecimal.ROUND_HALF_UP));
+
+		// Calculando mediana
+		bitcoinAurumPojo.setMedianSell(calculeMedian(valuesSell).setScale(3, RoundingMode.HALF_EVEN));
+		bitcoinAurumPojo.setMedianBuy(calculeMedian(valuesBuy).setScale(3, RoundingMode.HALF_EVEN));
+
+		// Maiores vendas e compras
+		bitcoinAurumPojo.setTopBuy(topFiveList(valuesBuy));
+		bitcoinAurumPojo.setTopSell(topFiveList(valuesSell));
+
+		// Calculando desvio padrao
+		bitcoinAurumPojo.setStandardDeviationBuy(calculeStandardDeviation(valuesBuy, averageBuy));
+		bitcoinAurumPojo.setStandardDeviationSell(calculeStandardDeviation(valuesSell, averageSell));
+
+		return bitcoinAurumPojo;
 	}
+
+	private BigDecimal calculeStandardDeviation(List<BigDecimal> values, BigDecimal average) {
+
+		BigDecimal standardDeviation = BigDecimal.ZERO;
+		for (BigDecimal value : values) {
+			BigDecimal aux = value.subtract(average);
+			standardDeviation = standardDeviation.add(aux.multiply(aux));
+		}
+		return BigDecimal.valueOf((Math.sqrt(standardDeviation.doubleValue() / (values.size() - 1)))).setScale(3, RoundingMode.HALF_EVEN);
+	}
+	
+	private BigDecimal calculeMedian(List<BigDecimal> values) {
+
+		if (values.size() % 2 == 0) {
+			return values.get(((values.size() / 2) + (values.size() / 2 + 1)) / 2);
+		} else {
+			return values.get((values.size() + 1) / 2);
+		}
+	}
+
+	private List<BigDecimal> topFiveList(List<BigDecimal> values) {
+
+		List<BigDecimal> topFive = new ArrayList<BigDecimal>();
+
+		for (int i = 0; topFive.size() < 5; i++) {
+			if (i == 0 || values.get(i).compareTo(topFive.get(topFive.size() - 1)) != 0) {
+				topFive.add(values.get(i));
+			} else {
+				continue;
+			}
+		}
+		return topFive;
+	}
+
 }
